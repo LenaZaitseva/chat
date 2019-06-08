@@ -1,2 +1,2 @@
 # chat
-repository for final course project
+repository for the final course project
