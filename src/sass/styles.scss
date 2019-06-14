@@ -1,10 +1,80 @@
-$color: teal;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.chat_wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 1900px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #8a8888;
 
-h1 {
+}
+.chat_header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100px;
+  border-bottom: 3px solid #d0cece;
+  padding: 0 15px;
+}
+.header_container_personal_info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 10%;
+  height: 100%;
+}
+.user_icon, .message {
+  width: 50%;
   display: flex;
   justify-content: center;
-  padding: 30px;
-  background-color: $color;
-  color: white;
+  align-items: center;
+}
+.user_icon img {
+  width: 50%;
+  height: 45%;
+}
+.message img {
+  width: 55%;
+  height: 40%;
+}
+.new_messages_tag {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #00a9b7;
+  color: #ffffff;
   text-align: center;
+  padding-top: 2px;
+  position: absolute;
+  left: 160px;
+  top: 20px;
+}
+.header_container_logo {
+  width: 70%;
+  height: 100%;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  padding-left: 150px;
+}
+.header_container_time {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 20%;
+  font-size: 18px;
+  align-items: center;
+}
+.timer_online, .current_time {
+  width: 50%;
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
 }
