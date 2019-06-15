@@ -1,10 +1,184 @@
 $color: teal;
 
+<<<<<<< Updated upstream
 h1 {
   display: flex;
   justify-content: center;
   padding: 30px;
   background-color: $color;
   color: white;
+=======
+}
+.chat_header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100px;
+  border-bottom: 3px solid #d0cece;
+  padding: 0 15px;
+}
+.header_container_personal_info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 10%;
+  height: 100%;
+}
+.user_account, .message {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user_account img {
+  width: 50%;
+  height: 45%;
+}
+.message img {
+  width: 55%;
+  height: 40%;
+}
+.new_messages_tag {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #00a9b7;
+  color: #ffffff;
+>>>>>>> Stashed changes
   text-align: center;
 }
+<<<<<<< Updated upstream
+=======
+.header_container_time {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 20%;
+  font-size: 18px;
+  align-items: center;
+}
+.timer_online, .current_time {
+  width: 50%;
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+.content_wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.chat_users {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  border-right: 3px solid #d0cece;
+}
+.users_online {
+  width: 100%;
+  display: flex;
+  font-size: 18px;
+  height: 60px;
+  padding: 25px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+.tag_online {
+ margin-right: 10px;
+}
+.users_list {
+  display: flex;
+  flex-direction: column;
+
+}
+.user {
+ display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 3px solid #d0cece;
+  padding: 15px;
+}
+.user_icon {
+  width: 20%;
+
+}
+.user_icon img {
+  width: 100%;
+  border-radius: 50%;
+}
+.user_name {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+.status_marker {
+  display: inline-flex;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #4cae4c;
+}
+.sleep {
+  background: #f08427;
+}
+.new_messages_from_user_tag {
+  visibility: hidden;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #00a9b7;
+  text-align: center;
+  font-size: 22px;
+  color: #ffffff;
+  padding-top: 7px;
+  margin-top: 15px;
+}
+.active {
+  visibility: visible;
+}
+main {
+  width: 80%;
+}
+.tabs {
+  position: relative; /* Относительное позиционирование */
+  width: 100%;
+}
+.tab, .tab-title {
+  display: inline-block; /* Выстраиваем по горизонтали */
+  height: 50px;
+  width: 300px;
+  border-radius: 12px 12px 0 0;
+}
+.tab input[type="radio"] {
+  display: none;
+}
+.tab {
+  margin-top: 10px;
+}
+.tab-title {
+  background: #ccc; /* Цвет фона */
+  padding: 5px 10px; /* Поля вокруг текста */
+  border: 1px solid #666; /* Параметры рамки */
+  border-bottom: none; /* Снизу линию убираем */
+}
+.tab-content {
+  position: absolute; /* Абсолютное позиционирование */
+  border: 3px solid #d0cece; /* Параметры рамки */
+  border-left: none;
+  padding: 10px; /* Поля вокруг текста */
+  left: 0; /* Размещаем у левого края */
+  width: 100%;
+  height: 700px;
+  display: none; /* Прячем вкладку */
+}
+.tab :checked + .tab-title {
+  position: relative; /* Относительное позиционирование */
+  background: #fff; /* Цвет фона */
+  top: 1px; /* Сдвигаем вниз */
+  z-index: 1; /* Отображаем поверх содержимого */
+}
+.tab :checked ~ .tab-content {
+  display: block; /* Показываем активную вкладку */
+}
+>>>>>>> Stashed changes
