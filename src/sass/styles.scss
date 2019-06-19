@@ -1,14 +1,22 @@
-$color: teal;
-
-<<<<<<< Updated upstream
-h1 {
-  display: flex;
-  justify-content: center;
-  padding: 30px;
-  background-color: $color;
-  color: white;
-=======
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
+body {
+  height: 100%;
+  overflow: hidden;
+}
+.chat_wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 1900px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #8a8888;
+  margin: 0 auto;
+}
+
 .chat_header {
   display: flex;
   flex-direction: row;
@@ -24,10 +32,20 @@ h1 {
   width: 10%;
   height: 100%;
 }
+.message {
+  position: relative;
+}
 .user_account, .message {
   width: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+a.to_account, a.all_new_massages {
+  display: flex;
+  justify-content: center;
+  height: 100%;
   align-items: center;
 }
 .user_account img {
@@ -44,11 +62,22 @@ h1 {
   border-radius: 50%;
   background: #00a9b7;
   color: #ffffff;
->>>>>>> Stashed changes
   text-align: center;
+  padding-top: 2px;
+  position: absolute;
+  left: 55px;
+  top: 20px;
 }
-<<<<<<< Updated upstream
-=======
+.header_container_logo {
+  width: 70%;
+  height: 100%;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  padding-left: 150px;
+}
 .header_container_time {
   display: flex;
   flex-direction: row;
@@ -70,10 +99,13 @@ h1 {
   width: 100%;
 }
 .chat_users {
-  width: 20%;
   display: flex;
   flex-direction: column;
   border-right: 3px solid #d0cece;
+  position: fixed;
+  width: 370px;
+  overflow-y: scroll;
+  height: 100%;
 }
 .users_online {
   width: 100%;
@@ -138,14 +170,15 @@ h1 {
   visibility: visible;
 }
 main {
-  width: 80%;
+  width: 100%;
+  padding-left: 370px;
 }
 .tabs {
-  position: relative; /* Относительное позиционирование */
+  position: relative;
   width: 100%;
 }
 .tab, .tab-title {
-  display: inline-block; /* Выстраиваем по горизонтали */
+  display: inline-block;
   height: 50px;
   width: 300px;
   border-radius: 12px 12px 0 0;
@@ -157,28 +190,135 @@ main {
   margin-top: 10px;
 }
 .tab-title {
-  background: #ccc; /* Цвет фона */
-  padding: 5px 10px; /* Поля вокруг текста */
-  border: 1px solid #666; /* Параметры рамки */
-  border-bottom: none; /* Снизу линию убираем */
+  background: #00a9b7;
+  padding: 10px;
+  border: 1px solid #d0cece;
+  border-bottom: none;
+  color: #ffffff;
+  font-size: 22px;
+  text-align: center;
 }
 .tab-content {
-  position: absolute; /* Абсолютное позиционирование */
-  border: 3px solid #d0cece; /* Параметры рамки */
+  position: absolute;
+  border: 3px solid #d0cece;
+  border-bottom: none;
   border-left: none;
-  padding: 10px; /* Поля вокруг текста */
-  left: 0; /* Размещаем у левого края */
+  padding: 10px;
+  left: 0;
   width: 100%;
-  height: 700px;
-  display: none; /* Прячем вкладку */
+  height: 750px;
+  display: none;
 }
 .tab :checked + .tab-title {
-  position: relative; /* Относительное позиционирование */
-  background: #fff; /* Цвет фона */
-  top: 1px; /* Сдвигаем вниз */
-  z-index: 1; /* Отображаем поверх содержимого */
+  position: relative;
+  background: #fff;
+  color: #8a8888;
+  font-size: 22px;
+  top: 4px;
+  z-index: 1;
 }
 .tab :checked ~ .tab-content {
-  display: block; /* Показываем активную вкладку */
+  display: block;
+  padding-bottom: 130px;
 }
->>>>>>> Stashed changes
+.user_link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.wrap_for_users_messages {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  overflow-y: scroll;
+  flex-direction:column;
+  align-items: flex-start;
+}
+.users_messages_text {
+  padding: 10px;
+  background: #d0cece;
+  border-radius: 25px;
+  max-width: 725px;
+  margin-bottom: 10px;
+}
+.your_messages_text {
+  display: flex;
+  align-self: flex-end;
+  padding: 10px;
+  background: #00a9b7;
+  color: #fff;
+  border-radius: 25px;
+  max-width: 725px;
+  margin-bottom: 10px;
+}
+.area_create_new_message {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0 20px;
+  width: 100%;
+}
+.field_for_typing {
+  position: relative;
+  margin: 0 0 15px;
+}
+.type_message {
+  width: 100%;
+  border: 2px solid #d0cece;
+  border-radius: 25px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+input[type=button] {
+  position: absolute;
+  right: 20px;
+  top: 0;
+  height: 100%;
+  color: #00a9b7;
+  border: none;
+  bottom: 0;
+  box-sizing: border-box;
+  line-height: 100%;
+  background: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+textarea:focus{
+  outline: none;
+}
+input:focus {
+  outline: none;
+  border: none;
+}
+.wrapper_for_customize {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.symbols {
+  display: flex;
+}
+.symbols div {
+  margin: 0 10px;
+}
+.field_for_customize button {
+  border: 1px solid #ccc;
+  width: 37px;
+  height: 37px;
+  background: #fff;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+.field_for_customize button:first-of-type {
+  font-weight: 700;
+}
+.field_for_customize button:nth-of-type(2) {
+  font-style: italic;
+}
+.field_for_customize button:last-of-type {
+  text-decoration: line-through;
+}
