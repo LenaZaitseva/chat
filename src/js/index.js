@@ -44,28 +44,30 @@ window.onload = function() {
             var request1 = new XMLHttpRequest();
             request1.open('POST', 'https://studentschat.herokuapp.com/users/register', true);
             request1.setRequestHeader('Content-Type', 'application/json');
-            request1.onreadystatechange = function() {
+
+            request1.onload = function(event) {
                 // Обработчик ответа в случае удачного соеденения
                 if (this.readyState != 4 && this.status == 200) {
                     var res = JSON.parse(request1.responseText);
                     console.log(res);
+                    document.getElementById('chat_wrapper').style.display = 'block';
+                    document.querySelector('body').style.background = "#ffffff";
+                    document.getElementById("registration-form").style.display = 'none';
+                }
+                else {
+                    document.getElementById("registration-form").style.display = 'none';
+                    document.querySelector('body').innerHTML =
+                        '<div class="registration-form" id="modal_error">' +
+                        '<div class="modal-header">Ошибка</div>'+
+                        '     <div class="modal-content">Регистрация не удалась. Попробуйте ещё раз!</div>' +
+                        '     <div class="modal-buttons">' +
+                        '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
+                        '     </div>' +
+                        '</div>'
                 }
             }
 
             request1.onerror = function() {
-                var backgr =  document.createElement("div");
-                backgr.className = "backgr_modal_error";
-                var div = document.createElement("div");
-                div.id = "modal_error";
-                div.className = "registration-form";
-                div.innerHTML +=
-                    '<div class="modal-header">Ошибка</div>' +
-                    '<div class="modal-content">Регистрация не удалась. Попробуйте ещё раз!</div>' +
-                    '<div class="modal-buttons">\n' +
-                    '\t\t\t\t<input type="button" value="Ок" class="Ок" id="btnOk" >\n' +
-                    '</div>';
-                document.getElementById("btnOk").addEventListener("click", location.reload());
-
 
             };
 
