@@ -105,7 +105,7 @@ a.to_account, a.all_new_massages {
   position: fixed;
   width: 370px;
   overflow-y: scroll;
-  height: 100%;
+  height: 90%;
 }
 .users_online {
   width: 100%;
@@ -189,6 +189,9 @@ main {
 .tab {
   margin-top: 10px;
 }
+.tab:first-of-type {
+  margin-left: 3px;
+}
 .tab-title {
   background: #00a9b7;
   padding: 10px;
@@ -201,20 +204,21 @@ main {
 .tab-content {
   position: absolute;
   border: 3px solid #d0cece;
-  border-bottom: none;
   border-left: none;
   padding: 10px;
   left: 0;
   width: 100%;
-  height: 750px;
+  height: 780px;
   display: none;
+  border-top: none;
+  outline: 3px solid #d0cece;
 }
 .tab :checked + .tab-title {
   position: relative;
   background: #fff;
   color: #8a8888;
   font-size: 22px;
-  top: 4px;
+ //top: 4px;
   z-index: 1;
 }
 .tab :checked ~ .tab-content {
@@ -271,8 +275,9 @@ main {
   font-family: inherit;
   font-size: 16px;
   box-sizing: border-box;
+  resize: none;
 }
-input[type=button] {
+.send {
   position: absolute;
   right: 20px;
   top: 0;
@@ -298,6 +303,7 @@ input:focus {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  padding-bottom: 10px;
 }
 .symbols {
   display: flex;
@@ -321,4 +327,81 @@ input:focus {
 }
 .field_for_customize button:last-of-type {
   text-decoration: line-through;
+}
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 250px;
+  margin: 250px auto;
+  padding: 26px 24px 46px;
+  font-weight: 400;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.13);
+  position: relative;
+}
+#my {
+  display: flex;
+  flex-direction: column;
+}
+#name {
+  font-size: 18px;
+  width: 100%;
+  padding: 10px;
+  margin: 30px 6px 50px 0;
+  background: #e7f8f9;
+  border: 1px solid #ddd;
+  outline: 0;
+}
+#name:active, #name:hover, #name:focus, #name:visited {
+  background: #e7f8f9;
+}
+.input_wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.btnReg {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #00a9b7;
+  cursor: pointer;
+}
+.btnEnter {
+  height: 30px;
+  line-height: 28px;
+  padding: 0 12px 2px;
+  background: #00a9b7;
+  border: 1px solid #038994;
+  opacity: 0.8;
+  color: #ffffff;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.reg {
+  text-align: center;
+  color: #494848;
+}
+#notification {
+  display: none;
+  position: absolute;
+  top: 150px;
+  font-size: 12px;
+  color: #ff3d39;
+}
+.backgr_modal_error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 35;
+  background: rgba(0, 0, 0, 0.28);
+  cursor: default;
+}
+.modal_error {
+
 }
