@@ -23,21 +23,25 @@ function modal_window() {
         '               </div>  ';
 }
 window.onload = function() {
-var a = document.createElement('div');
-a.id = 'modal_error';
-a.className = 'registration-form';
-a.innerHTML = '<div class="modal-header">Ошибка </div>' +
-    '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
-    '     <div class="modal-buttons">' +
-    '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-    '     </div>';
-    // '<div class="registration-form" id="modal_error">' +
-    // '<div class="modal-header">Ошибка </div>' +
-    // '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
-    // '     <div class="modal-buttons">' +
-    // '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-    // '     </div>' +
-    // '</div>';
+
+    var enter_error = document.createElement('div');
+    enter_error.id = 'modal_error';
+    enter_error.className = 'registration-form';
+    enter_error.innerHTML = '<div class="modal-header">Ошибка </div>' +
+        '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
+        '     <div class="modal-buttons">' +
+        '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
+        '     </div>';
+
+    var register_error = document.createElement('div');
+    register_error.id = 'modal_error';
+    register_error.className = 'registration-form';
+    register_error.innerHTML = '<div class="modal-header">Ошибка </div>' +
+        '     <div class="modal-content">Регистрация не удалась. Попробуйте ещё раз!</div>' +
+        '     <div class="modal-buttons">' +
+        '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
+        '     </div>';
+
     /*Регистрация пользователя*/
 
     document.getElementById('btnReg').addEventListener('click', registration);
@@ -79,33 +83,20 @@ a.innerHTML = '<div class="modal-header">Ошибка </div>' +
 
                 } else {
                     document.getElementById("registration-form").style.display = 'none';
-                    document.querySelector('body').innerHTML =
-                        '<div class="registration-form" id="modal_error">' +
-                        '<div class="modal-header">Ошибка</div>' +
-                        '     <div class="modal-content">Регистрация не удалась. Попробуйте ещё раз!</div>' +
-                        '     <div class="modal-buttons">' +
-                        '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-                        '     </div>' +
-                        '</div>';
+                    document.querySelector('body').appendChild(register_error);
                 }
             }
 
             request1.onerror = function() {
                 document.getElementById("registration-form").style.display = 'none';
-                document.querySelector('body').innerHTML =
-                    '<div class="registration-form" id="modal_error">' +
-                    '<div class="modal-header">Ошибка</div>'+
-                    '     <div class="modal-content">Регистрация не удалась. Попробуйте ещё раз!</div>' +
-                    '     <div class="modal-buttons">' +
-                    '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-                    '     </div>' +
-                    '</div>'
+                document.querySelector('body').appendChild(register_error);
             };
 
             request1.send(JSON.stringify(user));
         }
     }
     /* функция для входа пользователя в чат*/
+
     function login(who) {
         var name = document.getElementById('name').value;   console.log(name);
         if(name.length == 0) {
@@ -129,7 +120,6 @@ a.innerHTML = '<div class="modal-header">Ошибка </div>' +
 
                     JSON.parse(response).forEach(
                         function (obj) {
-                            console.log(obj);
                             if(obj['username'] === name) {
                                 document.getElementById("registration-form").style.display = 'none';
                                 document.getElementById("modal_error").style.display = 'none';
@@ -138,45 +128,100 @@ a.innerHTML = '<div class="modal-header">Ошибка </div>' +
 
                             } else {
                                 document.getElementById("registration-form").style.display = 'none';
-                                document.querySelector('body').appendChild(a);
-                                //document.querySelector('body').innerHTML =
-                                    // '<div class="registration-form" id="modal_error">' +
-                                    // '<div class="modal-header">Ошибка </div>' +
-                                    // '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
-                                    // '     <div class="modal-buttons">' +
-                                    // '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-                                    // '     </div>' +
-                                    // '</div>';
+                                document.querySelector('body').appendChild(enter_error);
                             }
                         }
                     )
                 } else {
                     // Обработчик ответа в случае ошибки
                     document.getElementById("registration-form").style.display = 'none';
-                    document.querySelector('body').innerHTML =
-                        '<div class="registration-form" id="modal_error">' +
-                        '<div class="modal-header">Ошибка</div>' +
-                        '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
-                        '     <div class="modal-buttons">' +
-                        '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-                        '     </div>' +
-                        '</div>';
+                    document.querySelector('body').appendChild(enter_error);
                 }
             }
             request.onerror = function() {
                 document.getElementById("registration-form").style.display = 'none';
-                document.querySelector('body').innerHTML =
-                    '<div class="registration-form" id="modal_error">' +
-                    '<div class="modal-header">Ошибка</div>' +
-                    '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
-                    '     <div class="modal-buttons">' +
-                    '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-                    '     </div>' +
-                    '</div>';
+                document.querySelector('body').appendChild(enter_error);
             };
             request.send(JSON.stringify(user));
         }
     }
+
+    /*Вывод количества активных пользователей*/
+
+    var users_online = document.querySelector('.count');
+    var user = {
+        "username": name
+    };
+    var usersList;
+    var request = new XMLHttpRequest();
+    request.open('GET', 'https://studentschat.herokuapp.com/users', true);
+
+    request.onload = function() {
+            // Обработчик успешного ответа
+            var response = request.responseText;
+                usersList = JSON.parse(response);
+            var userListActive = [];
+            usersList.forEach(
+                function (obj) {
+                    if(obj['status'] === "active") userListActive.push(obj);
+                    return userListActive;
+                })
+            users_online.innerText = userListActive.length;
+
+            /*Вывод списка пользователей*/
+            var users_list = document.querySelector(".users_list");
+            var online = '<a href="" class="user_link">\n' +
+                '                                    <div class="user">\n' +
+                '                                        <div class="user_icon">\n' +
+                '                                            <img src="images/capitanamerica.jpg" alt="Captain' +
+                ' America " style="visibility: hidden">\n' +
+                '                                        </div>\n' +
+                '                                        <div class="user_name">';
+
+            var online2 = '<span class="status_marker"></span>\n' +
+                '                                        </div>\n' +
+                '                                        <div class="new_messages_from_user_tag active"' +
+                ' style="visibility: hidden">\n' +
+                '                                            2\n' +
+                '                                        </div>\n' +
+                '                                    </div>\n' +
+                '                                </a>';
+            var offline = '<a href="" class="user_link">\n' +
+                '                                    <div class="user">\n' +
+                '                                        <div class="user_icon">\n' +
+                '                                            <img src="images/capitanamerica.jpg" alt="Captain' +
+                ' America " style="visibility: hidden">\n' +
+                '                                        </div>\n' +
+                '                                        <div class="user_name">';
+            var offline2 = '<span class="status_marker sleep"></span>\n' +
+        '                                        </div>\n' +
+        '                                        <div class="new_messages_from_user_tag active"' +
+        ' style="visibility: hidden">\n' +
+        '                                            2\n' +
+        '                                        </div>\n' +
+        '                                    </div>\n' +
+        '                                </a>'
+        usersList.forEach(
+            function (obj) {
+                if(obj['status'] === 'active') users_list.innerHTML += online + obj['username']+ ' ' + online2;
+                else users_list.innerHTML += offline + obj['username'] + ' ' + offline2;
+
+            })
+
+
+    }
+    request.onerror = function() {
+            users_online.innerText = ' ';
+    };
+    request.send(JSON.stringify(user));
+
+
+
+
+
+
+
+
 
 
 }
