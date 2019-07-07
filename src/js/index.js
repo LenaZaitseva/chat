@@ -23,7 +23,21 @@ function modal_window() {
         '               </div>  ';
 }
 window.onload = function() {
-
+var a = document.createElement('div');
+a.id = 'modal_error';
+a.className = 'registration-form';
+a.innerHTML = '<div class="modal-header">Ошибка </div>' +
+    '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
+    '     <div class="modal-buttons">' +
+    '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
+    '     </div>';
+    // '<div class="registration-form" id="modal_error">' +
+    // '<div class="modal-header">Ошибка </div>' +
+    // '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
+    // '     <div class="modal-buttons">' +
+    // '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
+    // '     </div>' +
+    // '</div>';
     /*Регистрация пользователя*/
 
     document.getElementById('btnReg').addEventListener('click', registration);
@@ -111,24 +125,28 @@ window.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
                     // Обработчик успещного ответа
                     var response = request.responseText;
-                    //var userList = [];
+                    var userList = Response;
 
                     JSON.parse(response).forEach(
                         function (obj) {
                             console.log(obj);
                             if(obj['username'] === name) {
+                                document.getElementById("registration-form").style.display = 'none';
+                                document.getElementById("modal_error").style.display = 'none';
                                 document.getElementById('chat_wrapper').style.display = 'block';
                                 document.querySelector('body').style.background = "#ffffff";
-                                document.getElementById("registration-form").style.display = 'none';
+
                             } else {
-                                document.querySelector('body').innerHTML =
-                                    '<div class="registration-form" id="modal_error">' +
-                                    '<div class="modal-header">Ошибка</div>' +
-                                    '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
-                                    '     <div class="modal-buttons">' +
-                                    '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
-                                    '     </div>' +
-                                    '</div>';
+                                document.getElementById("registration-form").style.display = 'none';
+                                document.querySelector('body').appendChild(a);
+                                //document.querySelector('body').innerHTML =
+                                    // '<div class="registration-form" id="modal_error">' +
+                                    // '<div class="modal-header">Ошибка </div>' +
+                                    // '     <div class="modal-content">Вход не выполнен. Попробуйте ещё раз!</div>' +
+                                    // '     <div class="modal-buttons">' +
+                                    // '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
+                                    // '     </div>' +
+                                    // '</div>';
                             }
                         }
                     )
@@ -144,7 +162,7 @@ window.onload = function() {
                         '     </div>' +
                         '</div>';
                 }
-            };
+            }
             request.onerror = function() {
                 document.getElementById("registration-form").style.display = 'none';
                 document.querySelector('body').innerHTML =
