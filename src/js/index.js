@@ -159,9 +159,9 @@ window.onload = function() {
     request.onload = function() {
             // Обработчик успешного ответа
             var response = request.responseText;
-                usersList = JSON.parse(response);
+                usersList = JSON.parse(response); console.log(usersList);
             var userListActive = [];
-            usersList.forEach(
+            usersList.forEach(             //вывести количество активных пользователей
                 function (obj) {
                     if(obj['status'] === "active") userListActive.push(obj);
                     return userListActive;
@@ -170,9 +170,9 @@ window.onload = function() {
 
             /*Вывод списка пользователей*/
             var users_list = document.querySelector(".users_list");
-            var online = '<a href="" class="user_link">\n' +
-                '                                    <div class="user">\n' +
-                '                                        <div class="user_icon">\n' +
+            var online = '<li class="user_link">\n' +
+                '                                    <div class="user" data-id ="\n';
+            var online1 = '<div class="user_icon">\n' +
                 '                                            <img src="images/capitanamerica.jpg" alt="Captain' +
                 ' America " style="visibility: hidden">\n' +
                 '                                        </div>\n' +
@@ -200,21 +200,155 @@ window.onload = function() {
         '                                            2\n' +
         '                                        </div>\n' +
         '                                    </div>\n' +
-        '                                </a>'
+        '                                </li>'
         usersList.forEach(
             function (obj) {
-                if(obj['status'] === 'active') users_list.innerHTML += online + obj['username']+ ' ' + online2;
+                if(obj['status'] === 'active') users_list.innerHTML += online + obj['user_id'] +'">'+online1 +obj['username']+ ' ' + online2;
                 else users_list.innerHTML += offline + obj['username'] + ' ' + offline2;
 
             })
-
-
+        compare(usersList);
     }
     request.onerror = function() {
             users_online.innerText = ' ';
     };
     request.send(JSON.stringify(user));
 
+    /**/
+
+
+/*Назначить событие открытия вкладки сообщений при нажатии на юзера*/
+
+    var elements = document.getElementById('users_list').addEventListener('click',findTarget);
+    var selectedTd;
+    function findTarget(event) {
+        var target = event.target;
+
+        while (target.className !== 'users_list') {
+            if (target.className === 'user') {
+                // нашли элемент, который нас интересует!
+                openTab(target);
+                return;
+            }
+            target = target.parentNode;
+        }
+    }
+        function openTab(target) {
+
+            var userDataId = target.getAttribute('data-id');
+            console.log(userDataId); //сохраняем в переменную user id
+
+            /* получаем имя выбранного пользователя для вставки в tab*/
+            var userName = target.getElementsByClassName('user_name');
+            console.dir(userName);
+            for (var i = 0; i < userName.length; i++) {
+                var g = userName[i].innerText;
+                console.log(g);
+            }
+            /*GET-запрос для вывода сообщений по пользователю target*/
+            var user = {
+                "user_id": userDataId
+            };
+            var messageList;
+            var messages;
+            var currentMessage;
+            var request = new XMLHttpRequest();
+            request.open('GET', 'https://studentschat.herokuapp.com/messages', true);
+
+            request.onload = function () {
+                // Обработчик успешного ответа
+                var response = request.responseText;
+                messageList = JSON.parse(response);
+                console.log(messageList);
+                var userMessageActive = [];
+                messageList.forEach(             //вывести cообщения по конкретному юзеру
+                    function (obj) {
+                        if (obj['user_id'] === +userDataId) {
+                            messages = obj;
+                            console.log(messages);
+                            currentMessage = messages['message'];
+                            console.log(currentMessage);
+                            createTab(currentMessage);
+                        }
+                        else createClearTab()
+                    });
+
+            }
+            request.onerror = function () {
+                //users_online.innerText = ' ';
+            };
+            request.send(JSON.stringify(user));
+
+            function createTab() {
+                document.getElementById('tabs').innerHTML += '<div class="tab">\n' +
+                    '                                    <input type="radio" id="tab1" name="tab-group" checked>\n' +
+                    '                                    <label for="tab1" class="tab-title">' + g + '</label>\n' +
+                    '                                    <section class="tab-content">\n' +
+                    '                                            <div class="wrap_for_users_messages">\n' +
+                    '                                                <div class="users_messages_text" id=' +
+                    ' "users_messages_text" style="display: none"></div>\n' +
+                    '                                                <div class="your_messages_text" id=' +
+                    ' "your_messages_text">' + currentMessage + '</div>\n' +
+                    '                                            </div>\n' +
+                    '                                        <div class="area_create_new_message">\n' +
+                    '                                             <div class="field_for_typing">\n' +
+                    '                                                 <textarea class="type_message" rows="1"\n' +
+                    '                                                           placeholder="Type something..."></textarea>\n' +
+                    '                                                 <input type="button" value="Send" class="send">\n' +
+                    '                                             </div>\n' +
+                    '                                            <div class="wrapper_for_customize">\n' +
+                    '                                                <div class="field_for_customize">\n' +
+                    '                                                    <button>B</button>\n' +
+                    '                                                    <button>I</button>\n' +
+                    '                                                    <button>S</button>\n' +
+                    '                                                </div>\n' +
+                    '                                                <div class="symbols">\n' +
+                    '                                                    <div>Leters: <span>13</span></div>|\n' +
+                    '                                                    <div>Invisible symbols: <span>2</span></div>|\n' +
+                    '                                                    <div>Punctuation marks: <span>1</span></div>|\n' +
+                    '                                                    <div >All symbols: <span>16</span></div>\n' +
+                    '                                                </div>\n' +
+                    '                                            </div>\n' +
+                    '                                        </div>\n' +
+                    '                                    </section>\n' +
+                    '                                </div>';
+            }
+            function createClearTab() {
+                document.getElementById('tabs').innerHTML += '<div class="tab">\n' +
+                    '                                    <input type="radio" id="tab1" name="tab-group" checked>\n' +
+                    '                                    <label for="tab1" class="tab-title">' + g + '</label>\n' +
+                    '                                    <section class="tab-content">\n' +
+                    '                                            <div class="wrap_for_users_messages">\n' +
+                    '                                            </div>\n' +
+                    '                                        <div class="area_create_new_message">\n' +
+                    '                                             <div class="field_for_typing">\n' +
+                    '                                                 <textarea class="type_message" rows="1"\n' +
+                    '                                                           placeholder="Type something..."></textarea>\n' +
+                    '                                                 <input type="button" value="Send" class="send">\n' +
+                    '                                             </div>\n' +
+                    '                                            <div class="wrapper_for_customize">\n' +
+                    '                                                <div class="field_for_customize">\n' +
+                    '                                                    <button>B</button>\n' +
+                    '                                                    <button>I</button>\n' +
+                    '                                                    <button>S</button>\n' +
+                    '                                                </div>\n' +
+                    '                                                <div class="symbols">\n' +
+                    '                                                    <div>Leters: <span>13</span></div>|\n' +
+                    '                                                    <div>Invisible symbols: <span>2</span></div>|\n' +
+                    '                                                    <div>Punctuation marks: <span>1</span></div>|\n' +
+                    '                                                    <div >All symbols: <span>16</span></div>\n' +
+                    '                                                </div>\n' +
+                    '                                            </div>\n' +
+                    '                                        </div>\n' +
+                    '                                    </section>\n' +
+                    '                                </div>';
+            }
+        }
+
+
+
+
+     }
 
 
 
@@ -222,6 +356,3 @@ window.onload = function() {
 
 
 
-
-
-}
