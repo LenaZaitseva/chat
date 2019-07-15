@@ -57,7 +57,35 @@
                         </aside>
                         <main>
                             <div class="tabs" id="tabs">
+                                <div class="tab" id="main">
+                                    <input type="radio" id="tab1" name="tab-group" checked>
+                                    <label for="tab1" class="tab-title main">Main</label>
+                                    <section class="tab-content">
+                                        <div class="wrap_for_users_messages" id="wrap_for_users_messages">
 
+                                        </div>
+                                        <div class="area_create_new_message">
+                                            <div class="field_for_typing">
+                                                 <textarea class="type_message" id="type_message" rows="1"
+                                                           placeholder="Type something..." maxlength="500"></textarea>
+                                                <input type="button" value="Send" class="send" id="send">
+                                            </div>
+                                            <div class="wrapper_for_customize">
+                                                <div class="field_for_customize">
+                                                    <button id="bold">B</button>
+                                                    <button id="italic">I</button>
+                                                    <button id="underline">U</button>
+                                                </div>
+                                                <div class="symbols">
+                                                    <div>Letters: <span id="letters">0</span></div>|
+                                                    <div>Invisible symbols: <span id="invisible_symbols">0</span></div>|
+                                                    <div>Punctuation marks: <span id="punctuation_marks">0</span></div>|
+                                                    <div >All symbols: <span id="all_symbols">0</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
                             </div>
                         </main>
                 </div>
