@@ -221,6 +221,7 @@ main {
  //top: 4px;
   z-index: 1;
 }
+
 .tab :checked ~ .tab-content {
   display: block;
   padding-bottom: 130px;
@@ -244,10 +245,19 @@ main {
 }
 .users_messages_text {
   padding: 10px;
-  background: #d0cece;
+  background: #f1f0f0;
   border-radius: 25px;
   max-width: 725px;
   margin-bottom: 10px;
+}
+.user_message_name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.user_message_date {
+  font-size: 12px;
+  font-weight: normal;
 }
 .your_messages_text {
   display: flex;
@@ -329,7 +339,8 @@ input:focus {
   font-style: italic;
 }
 .field_for_customize button:last-of-type {
-  text-decoration: line-through;
+  text-decoration: underline;
+;
 }
 .registration-form {
   display: flex;
