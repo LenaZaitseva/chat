@@ -41,6 +41,10 @@ window.onload = function() {
         '     <div class="modal-buttons">' +
         '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
         '     </div>';
+    var start_of_session;
+    var end_of_session;
+    var userId;
+    var date_of_last_message;
 
     /*Регистрация пользователя*/
 
@@ -80,6 +84,10 @@ window.onload = function() {
                     document.getElementById('chat_wrapper').style.display = 'block';
                     document.querySelector('body').style.background = "#ffffff";
                     document.getElementById("registration-form").style.display = 'none';
+                    create_userlist();
+                    create_messages();
+                    userId = res['user_id'];
+                    return userId;
 
                 } else {
                     document.getElementById("registration-form").style.display = 'none';
@@ -94,14 +102,17 @@ window.onload = function() {
 
             request1.send(JSON.stringify(user));
         }
+        current_time_at_the_header();
+        interval_current_time_at_the_header();
+        timer_of_being_online();
+        return {userId:userId, start_of_session:start_of_session};
     }
     /* функция для входа пользователя в чат*/
-var userId;
+
     function login(who) {
         var name = document.getElementById('name').value;   console.log(name);
         if(name.length == 0) {
             var notification = document.getElementById('notification');
-
             notification.style.display = "block";
             notification.innerText += "Поле не может быть пустым"
             document.getElementById("name").style.border = "1px solid #FF3D39";
@@ -125,10 +136,11 @@ var userId;
                                 document.getElementById("modal_error").style.display = 'none';
                                 document.getElementById('chat_wrapper').style.display = 'block';
                                 document.querySelector('body').style.background = "#ffffff";
+                                start_of_session = new Date().getTime();
                                 create_userlist();
                                 create_messages();
                                 userId = obj['user_id'];
-                                return userId;
+                                return {userId:userId, start_of_session:start_of_session};
 
                             } else {
                                 document.getElementById("registration-form").style.display = 'none';
@@ -141,7 +153,7 @@ var userId;
                     document.getElementById("registration-form").style.display = 'none';
                     document.querySelector('body').appendChild(enter_error);
                 }
-                return userId;
+                return {userId:userId, start_of_session:start_of_session};
             }
             request.onerror = function() {
                 document.getElementById("registration-form").style.display = 'none';
@@ -149,11 +161,48 @@ var userId;
             };
             request.send(JSON.stringify(user));
         }
-        return userId;
+        current_time_at_the_header();
+        interval_current_time_at_the_header();
+        timer_of_being_online();
+        return {userId:userId, start_of_session:start_of_session};
     }
-     userId = login;
+    function timer_of_being_online() {
+        var b = setInterval(counter_of_being_online,1000);
+    }
+    function counter_of_being_online() {
+        var curent = new Date().getTime();
+        var milliseconds = curent - start_of_session;
+        var hours = milliseconds / (1000*60*60);
+        var absoluteHours = Math.floor(hours);
+        var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours;
 
- function create_userlist() { //"Глобальная" функция создания списка юзеров, срабатывающая при входе пользователя
+        //Get remainder from hours and convert to minutes
+        var minutes = (hours - absoluteHours) * 60;
+        var absoluteMinutes = Math.floor(minutes);
+        var m = absoluteMinutes > 9 ? absoluteMinutes : '0' +  absoluteMinutes;
+
+        //Get remainder from minutes and convert to seconds
+        var seconds = (minutes - absoluteMinutes) * 60;
+        var absoluteSeconds = Math.floor(seconds);
+        var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds;
+
+        document.getElementById('online_hours').innerText = h;
+        document.getElementById('online_minutes').innerText = m;
+        document.getElementById('online_seconds').innerText = s;
+    }
+    function interval_current_time_at_the_header(){
+        var c = setInterval(current_time_at_the_header,10000);
+    }
+    function current_time_at_the_header() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        if (hours <= 9) hours = "0" + hours;
+        if (minutes <= 9) minutes = "0" + minutes;
+        document.getElementById('current_hours').innerText = hours;
+        document.getElementById('current_minutes').innerText = minutes;
+    }
+    function create_userlist() { //"Глобальная" функция создания списка юзеров, срабатывающая при входе пользователя
 
      /*Вывод количества активных пользователей*/
 
@@ -169,7 +218,6 @@ var userId;
          // Обработчик успешного ответа
          var response = request.responseText;
          usersList = JSON.parse(response);
-         console.log(usersList);
          var userListActive = [];
          usersList.forEach(             //вывести количество активных пользователей
              function (obj) {
@@ -233,13 +281,10 @@ var userId;
              // Обработчик успешного ответа
              var response1 = request1.responseText;
              usersList1 = JSON.parse(response1);
-             console.log(usersList1);
 
              //GET-запрос на получение сообщений
 
              var messageList;
-             var messages;
-             var currentMessage;
              var request = new XMLHttpRequest();
              request.open('GET', 'https://studentschat.herokuapp.com/messages', true);
 
@@ -247,12 +292,11 @@ var userId;
                  // Обработчик успешного ответа
                  var response = request.responseText;
                  messageList = JSON.parse(response);
-                 console.log(messageList);
                  var dayI=0;
                  messageList.forEach(
                      function (obj,i) {
                          var date = new Date(obj['datetime']);
-                         var day = date.getDate(); console.log(day);
+                         var day = date.getDate();
                          var hours = date.getHours();
                          var minutes = date.getMinutes();
                          usersList1.forEach(function (obj2) {
@@ -260,42 +304,44 @@ var userId;
                                  if (dayI < obj['datetime']) {
                                      document.getElementById('wrap_for_users_messages').innerHTML += '' +
                                          '<div>hhhhhhhhhhhhhhhhhhhhhhhkkkkkkkkkkkkkkkk</div>'+
-                                         '<div class = "user_message users_messages_text">' +
+                                         '<div class = "user_message users_messages_text" data-date = "' + obj["datetime"] + '">' +
                                          '<p class="user_message_name">' + obj2['username'] +
-                                         '        <span class="user_message_date" data-date = "' + obj["datetime"] + '">'+ hours + ':' + minutes + '</span>' +
+                                         '        <span class="user_message_date" >'+ hours + ':' + minutes + '</span>' +
                                          '</p>' +
                                          '<p class="user_message_text">' + obj['message'] + '</p>' +
                                          '</div>';
+                                     scroll_to_end();
+
                                  }else {
                                      document.getElementById('wrap_for_users_messages').innerHTML += '' +
-                                         '<div class = "user_message users_messages_text">' +
+                                         '<div class = "user_message users_messages_text" data-date = "' + obj["datetime"] + '">' +
                                          '<p class="user_message_name ">' + obj2['username'] +
-                                         '        <span class="user_message_date" data-date = "' + obj["datetime"] + '">'+hours + ':' + minutes + '</span>' +
+                                         '        <span class="user_message_date">'+hours + ':' + minutes + '</span>' +
                                          '</p>' +
                                          '<p class="user_message_text">' + obj['message'] + '</p>' +
                                          '</div>';
-                                     document.getElementById('wrap_for_users_messages').scrollTop = 9999; //автопрокрутка к концу сообщений
+                                     scroll_to_end();
                                  }
                              }
-
                          });
 
                          return dayI;
                      });
-
-             }
+                 interval_of_uploading_messages();
+             };
              request.onerror = function () {
-                 //users_online.innerText = ' ';
              };
              request.send(JSON.stringify(user));
-         }
+         };
          request1.onerror = function () {
          };
          request1.send(JSON.stringify(user));
 
      }
 
-    function upload() {
+
+    function uploading_new_messages() {
+        date_of_last_message = document.getElementById('wrap_for_users_messages').lastChild.getAttribute('data-date');
         var user = {
             "username": name
         };
@@ -307,13 +353,10 @@ var userId;
             // Обработчик успешного ответа
             var response1 = request1.responseText;
             usersList1 = JSON.parse(response1);
-            console.log(usersList1);
 
             //GET-запрос на получение сообщений
 
             var messageList;
-            var messages;
-            var currentMessage;
             var request = new XMLHttpRequest();
             request.open('GET', 'https://studentschat.herokuapp.com/messages', true);
 
@@ -321,51 +364,52 @@ var userId;
                 // Обработчик успешного ответа
                 var response = request.responseText;
                 messageList = JSON.parse(response);
-                console.log(messageList);
-                var downloaded = document.getElementsByClassName('user_message_date');
-                downloaded.forEach(function (el) {
-                    messageList.forEach(function (obj) {
-                        if (ell.getAttribute('data-date') != obj['datetime']) {
-                            var date = new Date(obj['datetime']);
-                            var day = date.getDate();
-                            console.log(day);
-                            var hours = date.getHours();
-                            var minutes = date.getMinutes();
-                            usersList1.forEach(function (obj2) {
-                                if (obj['user_id'] == obj2['user_id']) {
-                                    document.getElementById('wrap_for_users_messages').innerHTML += '' +
-                                        '<div class = "user_message users_messages_text">' +
-                                        '<p class="user_message_name ">' + obj2['username'] +
-                                        '        <span class="user_message_date" data-date = "' + obj["datetime"] + '">' + hours + ':' + minutes + '</span>' +
-                                        '</p>' +
-                                        '<p class="user_message_text">' + obj['message'] + '</p>' +
-                                        '</div>';
-                                }
-                            });
-                        }
-                    });
+                messageList.filter(function (obj) {
+                    var date = new Date(date_of_last_message);
+                    var obj_date = new Date(obj['datetime']);
+                    if (date.getTime() < obj_date.getTime()) {
+                                var date = new Date(obj['datetime']);
+                                var day = date.getDate();
+                                var hours = date.getHours();
+                                var minutes = date.getMinutes();
+                                usersList1.forEach(function (obj2) {
+                                    if (obj['user_id'] == obj2['user_id']) {
+                                        document.getElementById('wrap_for_users_messages').innerHTML += '' +
+                                            '<div class = "user_message users_messages_text" data-date = "' + obj["datetime"] + '">' +
+                                            '<p class="user_message_name">' + obj2['username'] +
+                                            '        <span class="user_message_date" >' + hours + ':' + minutes + '</span>' +
+                                            '</p>' +
+                                            '<p class="user_message_text">' + obj['message'] + '</p>' +
+                                            '</div>';
+                                    };
+                                });
+                        scroll_to_end();
+                    };
                 });
-
-            }
+            };
             request.onerror = function () {
-                //users_online.innerText = ' ';
             };
             request.send(JSON.stringify(user));
-        }
+        };
         request1.onerror = function () {
         };
         request1.send(JSON.stringify(user));
-
     }
-//var interval = setInterval(upload,2000);
 
+    function interval_of_uploading_messages() {
+        var interval_getting_new_messages = setInterval(uploading_new_messages,2000);
+    }
+
+    function scroll_to_end() {
+        document.getElementById('wrap_for_users_messages').scrollTop = 9999; //автопрокрутка к концу сообщений
+    }
 
 
      //подсчет кол-ва введенных символов
      var message_value;
-     document.getElementById('type_message').addEventListener('keyup',counter);
+     document.getElementById('type_message').addEventListener('keyup',counter_of_symbols);
      
-     function counter() {
+     function counter_of_symbols() {
 
          var all_symbols = this.value.length;
          document.getElementById('all_symbols').innerText = all_symbols; //общее кол-во символов
@@ -381,19 +425,6 @@ var userId;
          var regMarks = all_symbols - (regLetters+regEmpty);
          document.getElementById('punctuation_marks').innerText = regMarks;
 
-         // function getSelectionText() { //Получить выделенный текст
-         //     var txt = '';
-         //     if (txt = window.getSelection) { // Не IE, используем метод getSelection
-         //         txt = window.getSelection().toString();
-         //     } else { // IE, используем объект selection
-         //         txt = document.selection.createRange().text;
-         //     }
-         //     return txt;
-         // }
-         // var selection = getSelectionText();
-
-
-
          message_value = document.getElementById('type_message').value;
          return message_value;
          }
@@ -401,28 +432,25 @@ var userId;
          //Жирный, Курсив, подчеркнутый
     document.getElementById('bold').addEventListener('click',bold, {capture:true});
     function bold() {
-        // selection = getSelectionText(); console.dir(selection);
         document.getElementById('type_message').value += '<strong></strong>';
-        var a = document.getElementById('wrap_for_users_messages'); console.log(a);
     }
 
     document.getElementById('italic').addEventListener('click',italic);
     function italic() {
-        // selection = getSelectionText(); console.dir(selection);
         document.getElementById('type_message').value += '<em></em>';
     }
 
     document.getElementById('underline').addEventListener('click',underline);
     function underline() {
-        // selection = getSelectionText(); console.dir(selection);
         document.getElementById('type_message').value += '<u></u>';
-        console.log(userId);
+       console.log(start_of_session);
     }
 
      //отправка сообщения на сервер
-     var now = new Date();
+
      document.getElementById('send').addEventListener('click',sendMessage);
      function sendMessage() {
+         var now = new Date();
          var mess = {
              "datetime": now,
              "message": message_value,
@@ -436,7 +464,8 @@ var userId;
              // Обработчик ответа в случае удачного соеденения
              if (request2.status >= 200 && request2.status < 400) {
                  var res1 = JSON.parse(request2.responseText);
-                 console.log(res1);}
+                 document.getElementById('type_message').value = '';
+             }
          }
          request2.onerror = function() {
          };
@@ -477,8 +506,6 @@ var userId;
             console.log(g);
             createClearTab(g);
         }
-
-
 
         // /*GET-запрос для вывода сообщений по пользователю target*/
             // var user = {
