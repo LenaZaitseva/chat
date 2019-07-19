@@ -83,6 +83,7 @@ window.onload = function() {
                     document.getElementById('chat_wrapper').style.display = 'block';
                     document.querySelector('body').style.background = "#ffffff";
                     document.getElementById("registration-form").style.display = 'none';
+                    document.getElementById('user_nm').innerText = res['username'];
                     create_userlist();
                     create_messages();
                     userId = res['user_id'];
@@ -135,6 +136,7 @@ window.onload = function() {
                                 document.getElementById("modal_error").style.display = 'none';
                                 document.getElementById('chat_wrapper').style.display = 'block';
                                 document.querySelector('body').style.background = "#ffffff";
+                                document.getElementById('user_nm').innerText = obj['username'];
                                 start_of_session = new Date().getTime();
                                 create_userlist();
                                 create_messages();
@@ -290,19 +292,31 @@ window.onload = function() {
              request.onload = function () {
                  // Обработчик успешного ответа
                  var response = request.responseText;
-                 messageList = JSON.parse(response);
+                 messageList = JSON.parse(response); console.log(messageList);
                  var dayI=0;
                  messageList.forEach(
                      function (obj,i) {
                          var date = new Date(obj['datetime']);
-                         var day = date.getDate();
+                         var ms = date.getTime();
+                         // var day = date.getDate();
+                         // var month = date.getMonth();
                          var hours = date.getHours();
                          var minutes = date.getMinutes();
+                         var options = {
+                             month: 'long',
+                             day: 'numeric',
+                             weekday: 'long',
+                             timezone: 'UTC',
+                         };
+                         var localString = date.toLocaleString("ru", options);
+                         localString = localString[0].toUpperCase()+localString.substring(1);
                          usersList1.forEach(function (obj2) {
-                             if (obj['user_id'] == obj2['user_id']) {
-                                 if (dayI < obj['datetime']) {
+                             if (obj['user_id'] === obj2['user_id']) {
+                                 if (dayI < (ms-86400000)) {
                                      document.getElementById('wrap_for_users_messages').innerHTML += '' +
-                                         '<div>hhhhhhhhhhhhhhhhhhhhhhhkkkkkkkkkkkkkkkk</div>'+
+                                         '<div class="separator"><hr>' +
+                                         '     <span class="separator_date">'+localString+'</span>' +
+                                         '</div>'+
                                          '<div class = "user_message users_messages_text" data-date = "' + obj["datetime"] + '">' +
                                          '<p class="user_message_name">' + obj2['username'] +
                                          '        <span class="user_message_date" >'+ hours + ':' + minutes + '</span>' +
@@ -310,6 +324,8 @@ window.onload = function() {
                                          '<p class="user_message_text">' + obj['message'] + '</p>' +
                                          '</div>';
                                      scroll_to_end();
+                                     dayI = ms;
+                                     return dayI;
 
                                  }else {
                                      document.getElementById('wrap_for_users_messages').innerHTML += '' +
@@ -372,7 +388,7 @@ window.onload = function() {
                                 var hours = date.getHours();
                                 var minutes = date.getMinutes();
                                 usersList1.forEach(function (obj2) {
-                                    if (obj['user_id'] == obj2['user_id']) {
+                                    if (obj['user_id'] === obj2['user_id']) {
                                         document.getElementById('wrap_for_users_messages').innerHTML += '' +
                                             '<div class = "user_message users_messages_text" data-date = "' + obj["datetime"] + '">' +
                                             '<p class="user_message_name">' + obj2['username'] +
@@ -400,7 +416,7 @@ window.onload = function() {
     }
 
     function scroll_to_end() {
-        document.getElementById('wrap_for_users_messages').scrollTop = 9999; //автопрокрутка к концу сообщений
+        document.getElementById('wrap_for_users_messages').scrollTop = 99999; //автопрокрутка к концу сообщений
     }
 
 

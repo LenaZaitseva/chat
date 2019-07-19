@@ -47,14 +47,24 @@ a.to_account, a.all_new_massages {
   justify-content: center;
   height: 100%;
   align-items: center;
+  flex-direction: column;
+  text-decoration: none;
+  color: #00a9b7;
+  font-weight: bold;
+}
+#user_nm {
+  margin-top: 5px;
 }
 .user_account img {
   width: 50%;
   height: 45%;
 }
+.message {
+  margin-bottom: 20px;
+}
 .message img {
-  width: 55%;
-  height: 40%;
+  width: 60%;
+  height: 50%;
 }
 .new_messages_tag {
   width: 21px;
@@ -66,7 +76,7 @@ a.to_account, a.all_new_massages {
   padding-top: 2px;
   position: absolute;
   left: 55px;
-  top: 20px;
+  top: 10px;
 }
 .header_container_logo {
   width: 70%;
@@ -230,6 +240,7 @@ main {
   display: block;
   padding-bottom: 130px;
 }
+
 .user_link {
   cursor: pointer;
   text-decoration: none;
@@ -252,7 +263,7 @@ main {
   background: #f1f0f0;
   border-radius: 25px;
   max-width: 725px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 .user_message_name {
   font-size: 16px;
@@ -433,4 +444,37 @@ input:focus {
 #btnOk {
   position: relative;
   right: -200px;
+}
+.separator {
+width: 100%;
+}
+.separator_date {
+  font-size: 16px;
+  font-weight: bold;
+  background: #fff;
+  position: relative;
+  top: -12px;
+  left: 43%;
+  padding: 0 10px;
+  color: #00a9b7;
+}
+#to_account:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  left: 15px;
+  top: 10px;
+  right: 0;
+  bottom: 5px;
+  z-index: 1;
+  background: rgb(241, 240, 240);
+  color: #8a8888;
+  font-weight: bold;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 10px;
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  padding-top: 20px;
+  opacity: 0.8;
 }
