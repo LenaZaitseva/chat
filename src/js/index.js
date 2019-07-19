@@ -42,7 +42,6 @@ window.onload = function() {
         '          <input type="button" value="Ок" class="btnEnter" id="btnOk" onclick="location.reload()">' +
         '     </div>';
     var start_of_session;
-    var end_of_session;
     var userId;
     var date_of_last_message;
 
@@ -131,7 +130,7 @@ window.onload = function() {
 
                     JSON.parse(response).forEach(
                         function (obj) {
-                            if(obj['username'] === name || obj['password'] ===name  ) {
+                            if(obj['username'] === name || obj['password'] === name  ) {
                                 document.getElementById("registration-form").style.display = 'none';
                                 document.getElementById("modal_error").style.display = 'none';
                                 document.getElementById('chat_wrapper').style.display = 'block';
@@ -426,6 +425,9 @@ window.onload = function() {
          document.getElementById('punctuation_marks').innerText = regMarks;
 
          message_value = document.getElementById('type_message').value;
+         if ((/^\s*$/).test(message_value))document.getElementById('send').style.opacity = '0.4';
+         else document.getElementById('send').style.opacity = '1';
+
          return message_value;
          }
 
@@ -451,26 +453,28 @@ window.onload = function() {
      document.getElementById('send').addEventListener('click',sendMessage);
      function sendMessage() {
          var now = new Date();
-         var mess = {
-             "datetime": now,
-             "message": message_value,
-             "user_id": userId
-         };
-         var request2 = new XMLHttpRequest();
-         request2.open('POST', 'https://studentschat.herokuapp.com/messages', true);
-         request2.setRequestHeader('Content-Type', 'application/json');
+         if (!(/^\s*$/).test(message_value)){
+             var mess = {
+                 "datetime": now,
+                 "message": message_value,
+                 "user_id": userId
+             };
+             var request2 = new XMLHttpRequest();
+             request2.open('POST', 'https://studentschat.herokuapp.com/messages', true);
+             request2.setRequestHeader('Content-Type', 'application/json');
 
-         request2.onload = function() {
-             // Обработчик ответа в случае удачного соеденения
-             if (request2.status >= 200 && request2.status < 400) {
-                 var res1 = JSON.parse(request2.responseText);
-                 document.getElementById('type_message').value = '';
+             request2.onload = function () {
+                 // Обработчик ответа в случае удачного соеденения
+                 if (request2.status >= 200 && request2.status < 400) {
+                     var res1 = JSON.parse(request2.responseText);
+                     document.getElementById('type_message').value = '';
+                 }
              }
-         }
-         request2.onerror = function() {
-         };
+             request2.onerror = function () {
+             };
 
-         request2.send(JSON.stringify(mess));
+             request2.send(JSON.stringify(mess));
+         }
      }
 
 
@@ -480,7 +484,7 @@ window.onload = function() {
 
 /*Назначить событие открытия вкладки сообщений при нажатии на юзера*/
 
-    var elements = document.getElementById('users_list').addEventListener('click',findTarget);
+    document.getElementById('users_list').addEventListener('click',findTarget);
     var selectedTd;
     function findTarget(event) {
         var target = event.target;
@@ -496,16 +500,14 @@ window.onload = function() {
     }
     function openTab(target) {
 
-            var userDataId = target.getAttribute('data-id');
-            console.log(userDataId); //сохраняем в переменную user id
+        var userDataId = target.getAttribute('data-id');
+        console.log(userDataId); //сохраняем в переменную user id
 
-            /* получаем имя выбранного пользователя для вставки в tab*/
-            var userName = target.getElementsByClassName('user_name');
-            console.dir(userName);
-            var g = userName[0].innerText;
-            console.log(g);
-            createClearTab(g);
-        }
+        /* получаем имя выбранного пользователя для вставки в tab*/
+        var userName = target.getElementsByClassName('user_name');
+        var g = userName[0].innerText;
+        createClearTab(g);
+    }
 
         // /*GET-запрос для вывода сообщений по пользователю target*/
             // var user = {
@@ -551,8 +553,8 @@ window.onload = function() {
 
             function createTab(g) { //функция для открытия окна доалога с пользователем, где есть сообщения
                         document.getElementById('tabs').innerHTML += '<div class="tab">\n' +
-                            '                                    <input type="radio" id="tab1" name="tab-group" checked>\n' +
-                            '                                    <label for="tab1" class="tab-title" data-title="'+ g +'">' + g + '</label>\n' +
+                            '                                    <input type="radio" name="tab-group" id="'+g+'" checked>\n' +
+                            '                                    <label for="'+g+'" class="tab-title" data-title="'+ g +'">' + g + '</label>\n' +
                             '                                    <section class="tab-content">\n' +
                             '                                            <div class="wrap_for_users_messages">\n' +
                             '                                                <div class="users_messages_text" id=' +
@@ -585,8 +587,8 @@ window.onload = function() {
             }
             function createClearTab(g) {
                 document.getElementById('tabs').innerHTML += '<div class="tab">\n' +
-                    '                                    <input type="radio" id="tab1" name="tab-group">\n' +
-                    '                                    <label for="tab1" class="tab-title" data-title="'+ g +'">' + g + '</label>\n' +
+                    '                                    <input type="radio" name="tab-group" id="'+ g +'" checked>\n' +
+                    '                                    <label for="'+g+'" class="tab-title" data-title="'+ g +'">' + g + '</label>\n' +
                     '                                    <section class="tab-content">\n' +
                     '                                            <div class="wrap_for_users_messages">\n' +
                     '                                            </div>\n' +
