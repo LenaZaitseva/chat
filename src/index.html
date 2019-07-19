@@ -14,8 +14,9 @@
                 <header class="chat_header">
                     <div class="header_container_personal_info">
                         <div class="user_account">
-                            <a href="/" class="to_account" id ="to_account">
+                            <a href="/" class="to_account" id ="to_account" data-title="Выход">
                                 <img src="images/user.png" alt="user account">
+                                <span id="user_nm"></span>
                             </a>
                         </div>
                         <div class="message">
@@ -65,7 +66,7 @@
                         <main>
                             <div class="tabs" id="tabs">
                                 <div class="tab" id="main">
-                                    <input type="radio" id="tab1" name="tab-group" checked>
+                                    <input type="radio" id="tab1" name="tab-group" class="tab-group" checked>
                                     <label for="tab1" class="tab-title main">Main</label>
                                     <section class="tab-content">
                                         <div class="wrap_for_users_messages" id="wrap_for_users_messages">
