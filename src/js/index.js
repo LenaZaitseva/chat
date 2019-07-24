@@ -76,6 +76,7 @@ window.onload = function() {
                     document.querySelector('body').style.background = "#ffffff";
                     document.getElementById("registration-form").style.display = 'none';
                     document.getElementById('user_nm').innerText = res['username'];
+
                     create_userlist();
                     create_messages();
                     userId = res['user_id'];
@@ -400,7 +401,7 @@ window.onload = function() {
     }
 
     function scroll_to_end() {
-        document.getElementById('wrap_for_users_messages').scrollTop = 99999; //автопрокрутка к концу сообщений
+        document.getElementById('wrap_for_users_messages').scrollTop = 999999; //автопрокрутка к концу сообщений
     }
 
 
@@ -487,12 +488,12 @@ window.onload = function() {
     document.getElementById('users_list').addEventListener('click',findTarget);
     function findTarget(event) {
         var target = event.target;
-
         while (target.className !== 'users_list') {
-            if (target.className === 'user') {
-                // нашли элемент, который нас интересует!
-                openTab(target);
-                return;
+            if (target.className === 'user') { // нашли элемент, который нас интересует!
+                if (+target.getAttribute('data-id') !== +userId) {
+                    openTab(target);
+                    return;
+                }
             }
             target = target.parentNode;
         }
@@ -503,18 +504,17 @@ window.onload = function() {
     function openTab(target) {
 
         var userDataId = target.getAttribute('data-id');
-        console.log(userDataId); //сохраняем в переменную user id
 
         /* получаем имя выбранного пользователя для вставки в tab*/
         var userName = target.getElementsByClassName('user_name');
         var g = userName[0].innerText;
-        createClearTab(g);
+        createClearTab(userDataId,g);
     }
 
-            function createClearTab(g) {
+            function createClearTab(userDataId, g) {
                 document.getElementById('tabs').innerHTML += '<div class="tab">\n' +
                     '                                    <input type="radio" name="tab-group" id="'+ g +'" checked>\n' +
-                    '                                    <label for="'+g+'" class="tab-title" data-title="'+ g +'">' + g + '</label>\n' +
+                    '                                    <label for="'+g+'" class="tab-title" data-title="'+ g +'" data-id="'+userDataId+ '">' + g + '</label>\n' +
                     '                                    <section class="tab-content">\n' +
                     '                                            <div class="wrap_for_users_messages">\n' +
                     '                                               <div class = "user_message users_messages_text" data-date = "">' +
@@ -541,28 +541,8 @@ window.onload = function() {
                     '                                                   </p>'+
                     '                                                   <p class="user_message_text">'+
                     '                                                      quibusdam similique sunt ullam!'+
-                '                                                     </div>'+
+                    '                                                 </div>'+
                     '                                            </div>' +
-                    '                                        <div class="area_create_new_message">\n' +
-                    '                                             <div class="field_for_typing">\n' +
-                    '                                                 <textarea class="type_message" rows="1"\n' +
-                    '                                                           placeholder="Type something..."></textarea>\n' +
-                    '                                                 <input type="button" value="Send" class="send">\n' +
-                    '                                             </div>\n' +
-                    '                                            <div class="wrapper_for_customize">\n' +
-                    '                                                <div class="field_for_customize">\n' +
-                    '                                                    <button>B</button>\n' +
-                    '                                                    <button>I</button>\n' +
-                    '                                                    <button>S</button>\n' +
-                    '                                                </div>\n' +
-                    '                                                <div class="symbols">\n' +
-                    '                                                    <div>Leters: <span>13</span></div>|\n' +
-                    '                                                    <div>Invisible symbols: <span>2</span></div>|\n' +
-                    '                                                    <div>Punctuation marks: <span>1</span></div>|\n' +
-                    '                                                    <div >All symbols: <span>16</span></div>\n' +
-                    '                                                </div>\n' +
-                    '                                            </div>\n' +
-                    '                                        </div>\n' +
                     '                                    </section>\n' +
                     '                                </div>';
             }
