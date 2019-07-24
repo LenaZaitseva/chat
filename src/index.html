@@ -16,7 +16,7 @@
                         <div class="user_account">
                             <a href="/" class="to_account" id ="to_account" data-title="Выход">
                                 <img src="images/user.png" alt="user account">
-                                <span id="user_nm"></span>
+                                <span id="user_nm" data-id =''></span>
                             </a>
                         </div>
                         <div class="message">
@@ -69,30 +69,30 @@
                                     <input type="radio" id="tab1" name="tab-group" class="tab-group" checked>
                                     <label for="tab1" class="tab-title main">Main</label>
                                     <section class="tab-content">
-                                        <div class="wrap_for_users_messages" id="wrap_for_users_messages">
-
-                                        </div>
-                                        <div class="area_create_new_message">
-                                            <div class="field_for_typing">
-                                                 <textarea class="type_message" id="type_message" rows="1"
-                                                           placeholder="Type something..." maxlength="500"></textarea>
-                                                <input type="button" value="Send" class="send" id="send">
-                                            </div>
-                                            <div class="wrapper_for_customize">
-                                                <div class="field_for_customize">
-                                                    <button id="bold">B</button>
-                                                    <button id="italic">I</button>
-                                                    <button id="underline">U</button>
-                                                </div>
-                                                <div class="symbols">
-                                                    <div>Letters: <span id="letters">0</span></div>|
-                                                    <div>Invisible symbols: <span id="invisible_symbols">0</span></div>|
-                                                    <div>Punctuation marks: <span id="punctuation_marks">0</span></div>|
-                                                    <div >All symbols: <span id="all_symbols">0</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <div class="wrap_for_users_messages" id="wrap_for_users_messages"></div>
                                     </section>
+                                </div>
+                            </div>
+                            <div class="area_create_new_message">
+                                <div class="field_for_typing">
+                                    <textarea class="type_message" id="type_message" rows="1" placeholder="Type something..." maxlength="500"></textarea>
+                                    <input type="button" value="Send" class="send" id="send">
+                                </div>
+                                <div class="wrapper_for_customize">
+                                    <div class="field_for_customize">
+                                        <button id="bold">B</button>
+                                        <button id="italic">I</button>
+                                        <button id="underline">U</button>
+                                    </div>
+                                    <div class="symbols">
+                                        <div>Letters: <span id="letters" class="letters">0</span></div>|
+                                        <div>Invisible symbols:
+                                            <span id="invisible_symbols" class="invisible_symbols">0</span></div>|
+                                        <div>Punctuation marks:
+                                            <span id="punctuation_marks" class="punctuation_marks">0</span></div>|
+                                        <div >All symbols:
+                                            <span id="all_symbols" class="all_symbols">0</span></div>
+                                    </div>
                                 </div>
                             </div>
                         </main>

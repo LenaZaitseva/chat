@@ -45,20 +45,12 @@ window.onload = function() {
     var userId;
     var date_of_last_message;
 
-    /*Регистрация пользователя*/
+    /*Регистрация/Вход пользователя*/
 
     document.getElementById('btnReg').addEventListener('click', registration);
-    function registration() {
-        autorize('https://studentschat.herokuapp.com/users/register');
-    }
-    /*Вход пользователя в чат*/
-    document.getElementById('btnEnter').addEventListener('click', enter);
-    function enter() {
-        login('https://studentschat.herokuapp.com/users');
-    }
+    document.getElementById('btnEnter').addEventListener('click', login);
 
-/* функция для регистрации пользователя*/
-    function autorize(who) {
+    function registration() {
         var name = document.getElementById('name').value;   console.log(name);
         if(name.length == 0) {
             var notification = document.getElementById('notification');
@@ -72,7 +64,7 @@ window.onload = function() {
                 "username": name
             };
             var request1 = new XMLHttpRequest();
-            request1.open('POST', who, true);
+            request1.open('POST', 'https://studentschat.herokuapp.com/users/register', true);
             request1.setRequestHeader('Content-Type', 'application/json');
 
             request1.onload = function() {
@@ -84,6 +76,7 @@ window.onload = function() {
                     document.querySelector('body').style.background = "#ffffff";
                     document.getElementById("registration-form").style.display = 'none';
                     document.getElementById('user_nm').innerText = res['username'];
+
                     create_userlist();
                     create_messages();
                     userId = res['user_id'];
@@ -107,7 +100,7 @@ window.onload = function() {
         timer_of_being_online();
         return {userId:userId, start_of_session:start_of_session};
     }
-    /* функция для входа пользователя в чат*/
+
 
     function login(who) {
         var name = document.getElementById('name').value;   console.log(name);
@@ -121,11 +114,9 @@ window.onload = function() {
                 "username": name
             };
             var request = new XMLHttpRequest();
-            request.open('GET', who, true);
+            request.open('GET', 'https://studentschat.herokuapp.com/users', true);
 
             request.onload = function() {
-                if (request.status >= 200 && request.status < 400) {
-                    // Обработчик успещного ответа
                     var response = request.responseText;
 
 
@@ -147,13 +138,7 @@ window.onload = function() {
                                 document.getElementById("registration-form").style.display = 'none';
                                 document.querySelector('body').appendChild(enter_error);
                             }
-                        }
-                    )
-                } else {
-                    // Обработчик ответа в случае ошибки
-                    document.getElementById("registration-form").style.display = 'none';
-                    document.querySelector('body').appendChild(enter_error);
-                }
+                        })
                 return {userId:userId, start_of_session:start_of_session};
             }
             request.onerror = function() {
@@ -416,7 +401,7 @@ window.onload = function() {
     }
 
     function scroll_to_end() {
-        document.getElementById('wrap_for_users_messages').scrollTop = 99999; //автопрокрутка к концу сообщений
+        document.getElementById('wrap_for_users_messages').scrollTop = 999999; //автопрокрутка к концу сообщений
     }
 
 
@@ -501,133 +486,63 @@ window.onload = function() {
 /*Назначить событие открытия вкладки сообщений при нажатии на юзера*/
 
     document.getElementById('users_list').addEventListener('click',findTarget);
-    var selectedTd;
     function findTarget(event) {
         var target = event.target;
-
         while (target.className !== 'users_list') {
-            if (target.className === 'user') {
-                // нашли элемент, который нас интересует!
-                openTab(target);
-                return;
+            if (target.className === 'user') { // нашли элемент, который нас интересует!
+                if (+target.getAttribute('data-id') !== +userId) {
+                    openTab(target);
+                    return;
+                }
             }
             target = target.parentNode;
         }
     }
+
+
+
     function openTab(target) {
 
         var userDataId = target.getAttribute('data-id');
-        console.log(userDataId); //сохраняем в переменную user id
 
         /* получаем имя выбранного пользователя для вставки в tab*/
         var userName = target.getElementsByClassName('user_name');
         var g = userName[0].innerText;
-        createClearTab(g);
+        createClearTab(userDataId,g);
     }
 
-        // /*GET-запрос для вывода сообщений по пользователю target*/
-            // var user = {
-            //     "user_id": userDataId
-            // };
-            // var messageList;
-            // var messages;
-            // var currentMessage;
-            // var request = new XMLHttpRequest();
-            // request.open('GET', 'https://studentschat.herokuapp.com/messages', true);
-            //
-            // request.onload = function () {
-            //     // Обработчик успешного ответа
-            //     var response = request.responseText;
-            //     messageList = JSON.parse(response);
-            //     console.log(messageList);
-            //     var userMessageActive = [];
-            //     messageList.forEach(             //вывести cообщения по конкретному юзеру
-            //         function (obj) {
-            //             if (obj['user_id'] === +userDataId) {
-            //                 messages = obj;
-            //                 console.log(messages);
-            //                 currentMessage = messages['message'];
-            //                 console.log(currentMessage);
-            //                 var child = document.getElementById('tabs').childNodes; console.log(child);
-            //
-            //                  // for (var i = 0; i < child.length; i++) {
-            //                  //     var title = child[i].innerText;
-            //                  //        if (title === g) {
-            //                        createTab(currentMessage);
-            //                  //         }
-            //                  // }
-            //
-            //             }
-            //             else createClearTab()
-            //         });
-            //
-            // }
-            // request.onerror = function () {
-            //     //users_online.innerText = ' ';
-            // };
-            // request.send(JSON.stringify(user));
-
-            function createTab(g) { //функция для открытия окна доалога с пользователем, где есть сообщения
-                        document.getElementById('tabs').innerHTML += '<div class="tab">\n' +
-                            '                                    <input type="radio" name="tab-group" id="'+g+'" checked>\n' +
-                            '                                    <label for="'+g+'" class="tab-title" data-title="'+ g +'">' + g + '</label>\n' +
-                            '                                    <section class="tab-content">\n' +
-                            '                                            <div class="wrap_for_users_messages">\n' +
-                            '                                                <div class="users_messages_text" id=' +
-                            ' "users_messages_text" style="display: none"></div>\n' +
-                            '                                                <div class="your_messages_text" id=' +
-                            ' "your_messages_text">' + currentMessage + '</div>\n' +
-                            '                                            </div>\n' +
-                            '                                        <div class="area_create_new_message">\n' +
-                            '                                             <div class="field_for_typing">\n' +
-                            '                                                 <textarea class="type_message" rows="1"\n' +
-                            '                                                           placeholder="Type something..."></textarea>\n' +
-                            '                                                 <input type="button" value="Send" class="send">\n' +
-                            '                                             </div>\n' +
-                            '                                            <div class="wrapper_for_customize">\n' +
-                            '                                                <div class="field_for_customize">\n' +
-                            '                                                    <button>B</button>\n' +
-                            '                                                    <button>I</button>\n' +
-                            '                                                    <button>S</button>\n' +
-                            '                                                </div>\n' +
-                            '                                                <div class="symbols">\n' +
-                            '                                                    <div>Leters: <span>13</span></div>|\n' +
-                            '                                                    <div>Invisible symbols: <span>2</span></div>|\n' +
-                            '                                                    <div>Punctuation marks: <span>1</span></div>|\n' +
-                            '                                                    <div >All symbols: <span>16</span></div>\n' +
-                            '                                                </div>\n' +
-                            '                                            </div>\n' +
-                            '                                        </div>\n' +
-                            '                                    </section>\n' +
-                            '                                </div>';
-            }
-            function createClearTab(g) {
+            function createClearTab(userDataId, g) {
                 document.getElementById('tabs').innerHTML += '<div class="tab">\n' +
                     '                                    <input type="radio" name="tab-group" id="'+ g +'" checked>\n' +
-                    '                                    <label for="'+g+'" class="tab-title" data-title="'+ g +'">' + g + '</label>\n' +
+                    '                                    <label for="'+g+'" class="tab-title" data-title="'+ g +'" data-id="'+userDataId+ '">' + g + '</label>\n' +
                     '                                    <section class="tab-content">\n' +
                     '                                            <div class="wrap_for_users_messages">\n' +
-                    '                                            </div>\n' +
-                    '                                        <div class="area_create_new_message">\n' +
-                    '                                             <div class="field_for_typing">\n' +
-                    '                                                 <textarea class="type_message" rows="1"\n' +
-                    '                                                           placeholder="Type something..."></textarea>\n' +
-                    '                                                 <input type="button" value="Send" class="send">\n' +
-                    '                                             </div>\n' +
-                    '                                            <div class="wrapper_for_customize">\n' +
-                    '                                                <div class="field_for_customize">\n' +
-                    '                                                    <button>B</button>\n' +
-                    '                                                    <button>I</button>\n' +
-                    '                                                    <button>S</button>\n' +
-                    '                                                </div>\n' +
-                    '                                                <div class="symbols">\n' +
-                    '                                                    <div>Leters: <span>13</span></div>|\n' +
-                    '                                                    <div>Invisible symbols: <span>2</span></div>|\n' +
-                    '                                                    <div>Punctuation marks: <span>1</span></div>|\n' +
-                    '                                                    <div >All symbols: <span>16</span></div>\n' +
-                    '                                                </div>\n' +
-                    '                                            </div>\n' +
-                    '                                        </div>\n' +
+                    '                                               <div class = "user_message users_messages_text" data-date = "">' +
+                    '                                                   <p class="user_message_name">' + g +
+                    '                                                       <span class="user_message_date" >' +
+                    '                                                             13:15</span>' +
+                    '                                                   </p>'+
+                    '                                                   <p class="user_message_text">'+
+                    '                                                     Lorem ipsum dolor sit amet, consectetur' +
+                    ' adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>'+
+                    '                                                 </div>'+
+                    '                                                 <div class = "user_message users_messages_text" data-date = "">' +
+                    '                                                   <p class="user_message_name">' + g +
+                    '                                                       <span class="user_message_date" >' +
+                    '                                                             13:20</span>' +
+                    '                                                   </p>'+
+                    '                                                   <p class="user_message_text">'+
+                    '                                                      I\'m fine. Are U?'+
+                    '                                                 </div>'+
+                    '                                                 <div class = "user_message users_messages_text" data-date = "">'+
+                    '                                                   <p class="user_message_name">' + g +
+                    '                                                       <span class="user_message_date" >' +
+                    '                                                             13:25</span>'+
+                    '                                                   </p>'+
+                    '                                                   <p class="user_message_text">'+
+                    '                                                      quibusdam similique sunt ullam!'+
+                    '                                                 </div>'+
+                    '                                            </div>' +
                     '                                    </section>\n' +
                     '                                </div>';
             }
